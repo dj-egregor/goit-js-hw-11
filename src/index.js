@@ -17,7 +17,7 @@ const buttonLoadMore = document.querySelector('.load-more');
 
 function searchPictures(event) {
   event.preventDefault();
-  query = event.target.searchQuery.value.trim();
+  const query = event.target.searchQuery.value.trim();
   console.log(event.target.searchQuery.value);
   const urlGetQuery = `https://pixabay.com/api/?key=${APIKEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=2`;
   console.log(urlGetQuery);
