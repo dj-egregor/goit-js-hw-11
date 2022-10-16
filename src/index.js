@@ -48,7 +48,7 @@ async function getPictures(url) {
     }
     const content = images
       .map(image => {
-        return (imageHtml = `
+        return `
 <div class="photo-card">
   <a class="image-link" href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" width="300" loading="lazy" /></a>
   <div class="info">
@@ -69,7 +69,7 @@ async function getPictures(url) {
       <span class="count">${image.downloads}</span>
     </p>
   </div>
-</div>`);
+</div>`;
       })
       .join('');
 
