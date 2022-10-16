@@ -1,0 +1,23 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+img {
+  display: block;
+}
+
+.info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-item {
+  text-align: center;
+}
+
+.count {
+  display: block;
+}
