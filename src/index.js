@@ -9,36 +9,59 @@ const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.load-more');
 
+let page = 1;
+
 // Notify.success('Sol lucet omnibus');
 
 // const query = 'cat';
 // const urlGetQuery = `https://pixabay.com/api/?key=${APIKEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`;
 // console.log(urlGetQuery);
 
+const queryObj = {
+  perPage: 40,
+  query: '',
+  page: 1,
+  returnUrl() {
+    return `https://pixabay.com/api/?key=${APIKEY}&q=${this.query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}&page=${this.page}`;
+  },
+  nextPage() {
+    this.page += 1;
+  },
+  setQuery(query) {
+    this.query = query;
+  },
+  setPage(page) {
+    this.page = page;
+  },
+};
+
+// queryObj.nextPage();
+// queryObj.nextPage();
+// queryObj.nextPage();
+// queryObj.setQuery('cats');
+
+// console.log('ЗАПРОС', queryObj.returnUrl());
+
 function searchPictures(event) {
   event.preventDefault();
   const query = event.target.searchQuery.value.trim();
-  console.log(event.target.searchQuery.value);
-  const urlGetQuery = `https://pixabay.com/api/?key=${APIKEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=2`;
-  console.log(urlGetQuery);
-  getPictures(urlGetQuery);
+  queryObj.setPage(1);
+  queryObj.setQuery(query);
+  getPictures(queryObj.returnUrl());
 }
 
 searchForm.addEventListener('submit', searchPictures);
 buttonLoadMore.addEventListener('click', loadMore);
 
 function loadMore() {
-  console.log('load more');
+  queryObj.nextPage();
+  getPictures(queryObj.returnUrl());
 }
 
 async function getPictures(url) {
   try {
     const response = await axios.get(url);
-    // console.log(response);
-    console.log(response.data);
     const images = response.data.hits;
-
-    // console.log(hits);
 
     if (images.length === 0) {
       Notify.failure(
@@ -46,11 +69,14 @@ async function getPictures(url) {
       );
       return;
     }
+
+    buttonLoadMore.style.display = 'block';
+
     const content = images
       .map(image => {
         return `
 <div class="photo-card">
-  <a class="image-link" href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}" width="300" loading="lazy" /></a>
+  <a class="image-link" href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}"  loading="lazy" /></a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b>
@@ -73,30 +99,13 @@ async function getPictures(url) {
       })
       .join('');
 
-    //   console.log(content);
-    gallery.innerHTML = content;
+    gallery.insertAdjacentHTML('beforeend', content);
 
     const gal = new SimpleLightbox('.gallery a', {
       captions: true,
       captionsData: 'alt',
       captionDelay: 250,
     });
-
-    console.log(gal);
-    // for (const image of images) {
-    //   console.log(image);
-
-    //   console.log(imageHtml);
-    // }
-
-    // gallery;
-    // webformatURL - ссылка на маленькое изображение для списка карточек.
-    // largeImageURL - ссылка на большое изображение.
-    // tags - строка с описанием изображения. Подойдет для атрибута alt.
-    // likes - количество лайков.
-    // views - количество просмотров.
-    // comments - количество комментариев.
-    //   downloads - количество загрузок.
   } catch (error) {
     console.error(error);
   }
