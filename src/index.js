@@ -2,16 +2,11 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-// const inputEl = document.querySelector('[searchQuery]');
 const axios = require('axios').default;
 const APIKEY = '30622071-b7f240b19c0374f09e6aee33e';
 const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.load-more');
-
-// const { height: cardHeight } = document
-//   .querySelector('.gallery')
-//   .firstElementChild.getBoundingClientRect();
 
 const gal = new SimpleLightbox('.gallery a', {
   captions: true,
@@ -19,10 +14,8 @@ const gal = new SimpleLightbox('.gallery a', {
   captionDelay: 250,
 });
 
-// let gal;
-
 const queryObj = {
-  perPage: 20,
+  perPage: 40,
   query: '',
   page: 1,
   returnUrl() {
