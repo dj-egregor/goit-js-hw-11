@@ -9,16 +9,20 @@ const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.load-more');
 
-let page = 1;
+// const { height: cardHeight } = document
+//   .querySelector('.gallery')
+//   .firstElementChild.getBoundingClientRect();
 
-// Notify.success('Sol lucet omnibus');
+const gal = new SimpleLightbox('.gallery a', {
+  captions: true,
+  // captionsData: 'alt',
+  captionDelay: 250,
+});
 
-// const query = 'cat';
-// const urlGetQuery = `https://pixabay.com/api/?key=${APIKEY}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`;
-// console.log(urlGetQuery);
+// let gal;
 
 const queryObj = {
-  perPage: 40,
+  perPage: 20,
   query: '',
   page: 1,
   returnUrl() {
@@ -35,14 +39,13 @@ const queryObj = {
   },
 };
 
-// queryObj.nextPage();
-// queryObj.nextPage();
-// queryObj.nextPage();
-// queryObj.setQuery('cats');
-
-// console.log('ЗАПРОС', queryObj.returnUrl());
+function clearGallery() {
+  gallery.innerHTML = '';
+}
 
 function searchPictures(event) {
+  buttonLoadMore.style.display = 'none';
+  clearGallery();
   event.preventDefault();
   const query = event.target.searchQuery.value.trim();
   queryObj.setPage(1);
@@ -101,11 +104,18 @@ async function getPictures(url) {
 
     gallery.insertAdjacentHTML('beforeend', content);
 
-    const gal = new SimpleLightbox('.gallery a', {
-      captions: true,
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
+    if (queryObj.page !== 1) {
+      let { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+    }
+
+    gal.refresh();
   } catch (error) {
     console.error(error);
   }

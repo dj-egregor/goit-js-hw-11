@@ -1,8 +1,29 @@
+.gallery-container {
+  margin: 0 auto;
+  width: 430px;
+
+  @media screen and (min-width: 860px) {
+    width: calc((400px * 2) + 30px);
+  }
+
+  @media screen and (min-width: 1300px) {
+    width: calc((400px * 3) + (30px * 2));
+  }
+
+  @media screen and (min-width: 1700px) {
+    width: calc((400px * 4) + (30px * 3));
+  }
+}
+
 .gallery {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
+  justify-content: flex-start;
+  // width: calc(100% - (400 * 2 +));
 }
+
 img {
   display: block;
   height: 100%;
@@ -10,14 +31,58 @@ img {
   object-fit: cover;
 }
 
+.form-div {
+  padding: 0 15px;
+  background-color: rgb(79, 79, 231);
+  box-shadow: 0px 5px 10px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+}
+
+.search-form {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px 0;
+}
+
+.search {
+  width: 100%;
+  height: 42px;
+  padding-left: 10px;
+  border: 2px solid #dfdfdf;
+  border-radius: 5px;
+  outline: none;
+  background: #f9f0da;
+  color: #4b4b4b;
+}
+
+.submit-btn {
+  position: absolute;
+  top: 15зч;
+  right: 0px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: #dfdfdf;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.submit-btn:before {
+  content: '\1F50D';
+  font-size: 20px;
+  color: #f9f0da;
+}
+
 .info {
   width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
-  border-bottom: 1px solid gray;
+  justify-content: space-between;
+  padding: 0 15px;
+
   flex-grow: 1;
 }
 
@@ -30,19 +95,33 @@ img {
 }
 
 .image-link {
-  border: 1px solid gray;
+  // border: 1px solid gray;
   display: block;
-  width: 400px;
+  max-width: 400px;
   height: 260px;
   overflow: hidden;
   flex-grow: 1;
 }
 
 .photo-card {
+  max-width: 400px;
   display: flex;
   flex-direction: column;
+  border-radius: 5px;
+  // box-shadow: 1px 4px 3px -1px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 3px 3px 1px rgba(34, 60, 80, 0.2);
+  // border-bottom: 1px solid rgba(34, 60, 80, 0.2);
 }
 
 .load-more {
   display: none;
+  margin: 30px auto;
+  padding: 15px;
+  background-color: #2252ee;
+  border: none;
+  border-radius: 7px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0px 1px 10px 2px rgba(0, 0, 0, 0.2);
 }
