@@ -35,19 +35,18 @@ function clearGallery() {
   gallery.innerHTML = '';
 }
 
-function buttonLoadMoreHide() {
-  buttonLoadMore.style.display = 'none';
-}
-
-function buttonLoadMoreShow() {
-  buttonLoadMore.style.display = 'block';
+function buttonLoadMoreState(param) {
+  buttonLoadMore.style.display = param;
 }
 
 function searchPictures(event) {
-  buttonLoadMoreHide();
+  buttonLoadMoreState('none');
   clearGallery();
   event.preventDefault();
   const query = event.target.searchQuery.value.trim();
+  if (query === '') {
+    return;
+  }
   queryObj.setPage(1);
   queryObj.setQuery(query);
   getPictures(queryObj.returnUrl());
@@ -77,7 +76,7 @@ async function getPictures(url) {
       Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
     }
 
-    buttonLoadMoreShow();
+    buttonLoadMoreState('block');
 
     const content = images
       .map(image => {
