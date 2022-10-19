@@ -60,27 +60,10 @@ function loadMore() {
   getPictures(queryObj.returnUrl());
 }
 
-async function getPictures(url) {
-  try {
-    const response = await axios.get(url);
-    const images = response.data.hits;
-
-    if (images.length === 0) {
-      Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      return;
-    }
-
-    if (queryObj.page === 1) {
-      Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
-    }
-
-    buttonLoadMoreState('block');
-
-    const content = images
-      .map(image => {
-        return `
+function createPhotosHtml(imagesArr) {
+  return imagesArr
+    .map(image => {
+      return `
 <div class="photo-card">
   <a class="image-link" href="${image.largeImageURL}"><img src="${image.webformatURL}" alt="${image.tags}"  loading="lazy" /></a>
   <div class="info">
@@ -102,24 +85,41 @@ async function getPictures(url) {
     </p>
   </div>
 </div>`;
-      })
-      .join('');
+    })
+    .join('');
+}
 
-    gallery.insertAdjacentHTML('beforeend', content);
+function scroll() {
+  if (queryObj.page !== 1) {
+    let { height: cardHeight } = document
+      .querySelector('.gallery')
+      .firstElementChild.getBoundingClientRect();
 
-    if (queryObj.page !== 1) {
-      let { height: cardHeight } = document
-        .querySelector('.gallery')
-        .firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+  }
+}
 
-      window.scrollBy({
-        top: cardHeight * 2,
-        behavior: 'smooth',
-      });
+async function getPictures(url) {
+  try {
+    const response = await axios.get(url);
+    const images = response.data.hits;
+    if (images.length === 0) {
+      Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
     }
-
+    if (queryObj.page === 1) {
+      Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
+    }
+    buttonLoadMoreState('block');
+    gallery.insertAdjacentHTML('beforeend', createPhotosHtml(images));
+    scroll();
     gal.refresh();
   } catch (error) {
-    console.error(error);
+    Notify.failure(error);
   }
 }
